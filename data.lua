@@ -20,7 +20,7 @@ data:extend({
     {
         type = "recipe",
         name = "nutrient-solution-from-spoilage",
-        icon = "__space-age__/graphics/icons/nutrients-from-spoilage.png",
+        icon = "__fluid-nutrients__/gfx/nutrient-solution-from-spoilage.png",
         category = "organic-or-chemistry",
         subgroup = "agriculture-processes",
         order = "c[nutrient-solution]-a[nutrient-solution-from-spoilage]",
