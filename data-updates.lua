@@ -41,6 +41,19 @@ for _,recipe in pairs(data.raw.recipe) do
     end
 end
 
+-- Update all technologies requiring nutrients to require nutrient-solution
+for _,technology in pairs(data.raw.technology) do
+    if technology.research_trigger 
+    and technology.research_trigger.item 
+    and technology.research_trigger.item == "nutrients" then
+        technology.research_trigger = {
+            type = "craft-fluid",
+            fluid = "nutrient-solution",
+            amount = technology.research_trigger.count * nutrient_solution_ratio
+        }
+    end
+end
+
 -- Update biochamber to take nutrient-solution as fuel
 local biochamber = data.raw["assembling-machine"]["biochamber"]
 biochamber.energy_source = {
