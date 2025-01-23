@@ -1,6 +1,6 @@
 -- Update all recipes using nutrients to use nutrient-solution
-local nutrients_energy = data.raw.fluid["nutrients"].fuel_value:gsub("M", "000"):gsub("[kJ]", "")
-local nutrient_solution_energy = data.raw.item["nutrient-solution"].fuel_value:gsub("M", "000"):gsub("[kJ]", "")
+local nutrients_energy = data.raw.item["nutrients"].fuel_value:gsub("M", "000"):gsub("[kJ]", "")
+local nutrient_solution_energy = data.raw.fluid["nutrient-solution"].fuel_value:gsub("M", "000"):gsub("[kJ]", "")
 local nutrient_solution_ratio = nutrients_energy/nutrient_solution_energy
 
 for _,recipe in pairs(data.raw.recipe) do
