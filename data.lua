@@ -8,7 +8,7 @@ data:extend({
         order = "b[new-fluid]-d[gleba]-a[nutrient-solution]",
         default_temperature = 15,
         max_temperature = 100,
-        fuel_value = "1MJ",
+        fuel_value = "200kJ",
         base_color = {0.6, 0.6, 0.9},
         flow_color = {0.7, 0.7, 0.95},
         auto_barrel = true
