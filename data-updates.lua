@@ -177,3 +177,26 @@ if settings.startup["captive-biter-spawner-use-nutrient-solution"].value then
         end
     end
 end
+
+-- Give fish breeding a use as a way to produce nutrient solution (with biochamber)
+if settings.startup["fish-breeding-net-positive-nutrient-solution"].value then
+    data.raw.recipe["nutrients-from-fish"].allow_productivity = true
+    data.raw.recipe["nutrients-from-fish"].results[1].amount = data.raw.recipe["nutrients-from-fish"].results[1].amount / nutrient_solution_ratio
+    local nutrients_from_fish_out = data.raw.recipe["nutrients-from-fish"].results[1].amount
+    for _,ingredient in pairs(data.raw.recipe["nutrients-from-fish"].ingredients) do
+        if ingredient.name == "water" then
+            ingredient.amount = ingredient.amount / nutrient_solution_ratio
+        end
+    end
+
+    local fish_breeding_ingredients = data.raw.recipe["fish-breeding"].ingredients
+    for i = #fish_breeding_ingredients, 1, -1 do
+        local ingredient = fish_breeding_ingredients[i]
+        if ingredient.name == "nutrient-solution" then
+            ingredient.amount = nutrients_from_fish_out
+        end
+        if ingredient.name == "water" then
+            table.remove(fish_breeding_ingredients, i)
+        end
+    end
+end
