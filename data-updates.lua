@@ -132,3 +132,48 @@ if settings.startup["biolab-use-nutrient-solution"].value then
         emissions_per_minute = biolab.energy_source.emissions_per_minute,
     }
 end
+
+-- Update captive biter spawner to take nutrient-solution as fuel
+if settings.startup["captive-biter-spawner-use-nutrient-solution"].value then
+    local captive_biter_spawner = data.raw["assembling-machine"]["captive-biter-spawner"]
+    captive_biter_spawner.energy_source = {
+        type = "fluid",
+        fluid_box = {
+            volume = 20,
+            filter = "nutrient-solution",
+            minimum_temperature = 15,
+            masaximum_temperature = 100,
+            pipe_picture = {
+                north = table.deepcopy(data.raw["assembling-machine"]["electromagnetic-plant"].fluid_boxes[1].pipe_picture.north),
+                east = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1].pipe_picture.east,
+                south = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1].pipe_picture.south,
+                west = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1].pipe_picture.west
+            },
+            pipe_picture_frozen = {
+                north = table.deepcopy(data.raw["assembling-machine"]["electromagnetic-plant"].fluid_boxes[1].pipe_picture_frozen.north),
+                east = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1].pipe_picture_frozen.east,
+                south = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1].pipe_picture_frozen.south,
+                west = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1].pipe_picture_frozen.west
+            },
+            pipe_covers = biochamber.fluid_boxes[1].pipe_covers,
+            pipe_connections = {
+                {flow_direction = "input", direction = defines.direction.west, position = {-2, 0}},
+                {flow_direction = "input", direction = defines.direction.east, position = {2, 0}},
+                {flow_direction = "input", direction = defines.direction.south, position = {0, 2}},
+                {flow_direction = "input", direction = defines.direction.north, position = {0, -2}}
+            },
+            secondary_draw_orders = { north = -1 },
+        },
+        burns_fluid = true,
+        emissions_per_minute = captive_biter_spawner.energy_source.emissions_per_minute,
+    }
+
+    -- Also nerf biter egg to nutrient solution recipe
+    local biter_nutrient_recipe = data.raw.recipe["nutrients-from-biter-egg"]
+    biter_nutrient_recipe.results[1].amount = biter_nutrient_recipe.results[1].amount / nutrient_solution_ratio
+    for _,ingredient in pairs(biter_nutrient_recipe.ingredients) do
+        if ingredient.name == "water" then
+            ingredient.amount = ingredient.amount / nutrient_solution_ratio
+        end
+    end
+end

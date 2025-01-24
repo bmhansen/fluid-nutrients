@@ -22,5 +22,11 @@ data.raw.recipe["nutrients-from-bioflux"].icon = "__fluid-nutrients__/gfx/nutrie
 data.raw.recipe["nutrients-from-fish"].icon = "__fluid-nutrients__/gfx/nutrient-solution-from-fish.png"
 data.raw.recipe["nutrients-from-biter-egg"].icon = "__fluid-nutrients__/gfx/nutrient-solution-from-biter-egg.png"
 
+-- Update biter-spawner related text if setting is on
+if settings.startup["captive-biter-spawner-use-nutrient-solution"].value then
+    data.raw.technology["captivity"].localised_description = {"technology-description.captivity-nutrient-solution"}
+    data.raw.technology["biter-egg-handling"].localised_description = {"technology-description.biter-egg-handling-nutrient-solution"}
+end
+
 -- TODO:
 -- fix empty nutrient-solution to be pizza alert icon instead of fuel
