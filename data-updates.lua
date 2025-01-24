@@ -55,6 +55,13 @@ for _,technology in pairs(data.raw.technology) do
 end
 
 -- Update biochamber to take nutrient-solution as fuel
+local biochamber_flow_direction
+if settings.startup["biochamber-nutrient-solution-flow-through"].value then
+    biochamber_flow_direction = "input-output"
+else
+    biochamber_flow_direction = "input"
+end
+
 local biochamber = data.raw["assembling-machine"]["biochamber"]
 biochamber.energy_source = {
     type = "fluid",
@@ -77,12 +84,13 @@ biochamber.energy_source = {
         },
         pipe_covers = biochamber.fluid_boxes[1].pipe_covers,
 		pipe_connections = {
-            {flow_direction = "input", direction = defines.direction.west, position = {-1, 0}},
-            {flow_direction = "input", direction = defines.direction.east, position = {1, 0}}
+            {flow_direction = biochamber_flow_direction, direction = defines.direction.west, position = {-1, 0}},
+            {flow_direction = biochamber_flow_direction, direction = defines.direction.east, position = {1, 0}}
 		},
         secondary_draw_orders = { north = -1 },
     },
     burns_fluid = true,
+    scale_fluid_usage = true,
     effectivity = biochamber.energy_source.effectivity,
     emissions_per_minute = biochamber.energy_source.emissions_per_minute,
     light_flicker = biochamber.energy_source.light_flicker
