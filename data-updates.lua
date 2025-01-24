@@ -49,7 +49,7 @@ for _,technology in pairs(data.raw.technology) do
         technology.research_trigger = {
             type = "craft-fluid",
             fluid = "nutrient-solution",
-            amount = technology.research_trigger.count * nutrient_solution_ratio
+            amount = (technology.research_trigger.count or 1) * nutrient_solution_ratio
         }
     end
 end
