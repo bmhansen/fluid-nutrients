@@ -16,7 +16,7 @@ for _,recipe in pairs(data.raw.recipe) do
             end
         end
 	end
-    
+
     if recipe.results then
         for _,result in pairs(recipe.results) do
             if result.name == "nutrients" then
@@ -25,16 +25,18 @@ for _,recipe in pairs(data.raw.recipe) do
                 result.amount = (result.amount or 1) * nutrient_solution_ratio
                 result.percent_spoiled = nil
 
-                recipe.ingredients = recipe.ingredients or {}
-                local water_is_ingredient = false
-                for _,ingredient in pairs(recipe.ingredients) do
-                    if ingredient.name == "water" then
-                        water_is_ingredient = true
-                        ingredient.amount = (ingredient.amount or 1) + result.amount
+                if settings.startup["water-needed-to-make-nutrient-solution"].value then
+                    recipe.ingredients = recipe.ingredients or {}
+                    local water_is_ingredient = false
+                    for _,ingredient in pairs(recipe.ingredients) do
+                        if ingredient.name == "water" then
+                            water_is_ingredient = true
+                            ingredient.amount = (ingredient.amount or 1) + result.amount
+                        end
                     end
-                end
-                if not water_is_ingredient then
-                    table.insert(recipe.ingredients, {type = "fluid", name = "water", amount = result.amount})
+                    if not water_is_ingredient then
+                        table.insert(recipe.ingredients, {type = "fluid", name = "water", amount = result.amount})
+                    end
                 end
             end
         end

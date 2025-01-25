@@ -26,5 +26,12 @@ data:extend({
         setting_type = "startup",
         default_value = false,
         order = "d",
+    },
+    {
+        type = "bool-setting",
+        name = "water-needed-to-make-nutrient-solution",
+        setting_type = "startup",
+        default_value = false,
+        order = "e",
     }
 })
