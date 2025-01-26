@@ -1,7 +1,7 @@
 Version: 1.0.1
 Date: 26. 01. 2025
   Features:
-    - Add setting to remove water requirement for nutrient solution recipes.
+    - Add setting to add water as requirement for nutrient solution recipes.
 Version: 1.0.0
 Date: 25. 01. 2025
   Features:
