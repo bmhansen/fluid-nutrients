@@ -21,6 +21,7 @@ for _,recipe in pairs(data.raw.recipe) do
         for _,result in pairs(recipe.results) do
             if result.name == "nutrients" then
                 result.name = "nutrient-solution"
+                recipe.main_product = "nutrient-solution"
                 result.type = "fluid"
                 result.amount = (result.amount or 1) * nutrient_solution_ratio
                 result.percent_spoiled = nil
