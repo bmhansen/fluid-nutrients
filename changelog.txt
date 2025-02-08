@@ -1,5 +1,7 @@
 Version: 1.0.2
 Date: 2025-02-08
+  Changes:
+    - Optional settings are now all false by default
   Bugfixes:
     - Fixed main_product not being set in nutrient solution recipes.
 ---------------------------------------------------------------------------------------------------
