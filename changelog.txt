@@ -1,3 +1,8 @@
+Version: 1.0.3
+Date: 2025-02-13
+  Bugfixes:
+    - Fixed recycling of items that normally had nutrients as a result.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025-02-08
   Changes:
