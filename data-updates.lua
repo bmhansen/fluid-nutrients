@@ -13,6 +13,7 @@ for _,recipe in pairs(data.raw.recipe) do
                 if recipe.category == "crafting" then
                     recipe.category = "crafting-with-fluid"
                 end
+                break
             end
         end
 	end
@@ -38,12 +39,14 @@ for _,recipe in pairs(data.raw.recipe) do
                         if ingredient.name == "water" then
                             water_is_ingredient = true
                             ingredient.amount = (ingredient.amount or 1) + result.amount
+                            break
                         end
                     end
                     if not water_is_ingredient then
                         table.insert(recipe.ingredients, {type = "fluid", name = "water", amount = result.amount})
                     end
                 end
+                break
             end
         end
     end
@@ -182,6 +185,7 @@ if settings.startup["captive-biter-spawner-use-nutrient-solution"].value then
     for _,ingredient in pairs(biter_nutrient_recipe.ingredients) do
         if ingredient.name == "water" then
             ingredient.amount = ingredient.amount / nutrient_solution_ratio
+            break
         end
     end
 end
@@ -194,6 +198,7 @@ if settings.startup["fish-breeding-net-positive-nutrient-solution"].value then
     for _,ingredient in pairs(data.raw.recipe["nutrients-from-fish"].ingredients) do
         if ingredient.name == "water" then
             ingredient.amount = ingredient.amount / nutrient_solution_ratio
+            break
         end
     end
 
