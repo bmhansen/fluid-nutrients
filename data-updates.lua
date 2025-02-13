@@ -18,8 +18,13 @@ for _,recipe in pairs(data.raw.recipe) do
 	end
 
     if recipe.results then
-        for _,result in pairs(recipe.results) do
+        for i, result in pairs(recipe.results) do
             if result.name == "nutrients" then
+                if string.find(recipe.name, "-recycling") then
+                    table.remove(recipe.results, i)
+                    break
+                end
+
                 result.name = "nutrient-solution"
                 recipe.main_product = "nutrient-solution"
                 result.type = "fluid"
