@@ -109,6 +109,13 @@ biochamber.energy_source = {
 
 -- Update biolab to take nutrient-solution as fuel
 if settings.startup["biolab-use-nutrient-solution"].value then
+    local biolab_flow_direction
+    if settings.startup["biolab-nutrient-solution-flow-through"].value then
+        biolab_flow_direction = "input-output"
+    else
+        biolab_flow_direction = "input"
+    end
+
     local biolab = data.raw["lab"]["biolab"]
     biolab.energy_source = {
         type = "fluid",
@@ -131,10 +138,10 @@ if settings.startup["biolab-use-nutrient-solution"].value then
             },
             pipe_covers = biochamber.fluid_boxes[1].pipe_covers,
             pipe_connections = {
-                {flow_direction = "input", direction = defines.direction.west, position = {-2, 0}},
-                {flow_direction = "input", direction = defines.direction.east, position = {2, 0}},
-                {flow_direction = "input", direction = defines.direction.south, position = {0, 2}},
-                {flow_direction = "input", direction = defines.direction.north, position = {0, -2}}
+                {flow_direction = biolab_flow_direction, direction = defines.direction.west, position = {-2, 0}},
+                {flow_direction = biolab_flow_direction, direction = defines.direction.east, position = {2, 0}},
+                {flow_direction = biolab_flow_direction, direction = defines.direction.south, position = {0, 2}},
+                {flow_direction = biolab_flow_direction, direction = defines.direction.north, position = {0, -2}}
             },
             secondary_draw_orders = { north = -1 },
         },

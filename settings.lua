@@ -29,16 +29,23 @@ data:extend({
     },
     {
         type = "bool-setting",
-        name = "water-needed-to-make-nutrient-solution",
+        name = "biolab-nutrient-solution-flow-through",
         setting_type = "startup",
         default_value = false,
         order = "e",
     },
     {
         type = "bool-setting",
-        name = "nutrient-solution-use-alt-icons",
+        name = "water-needed-to-make-nutrient-solution",
         setting_type = "startup",
         default_value = false,
         order = "f",
+    },
+    {
+        type = "bool-setting",
+        name = "nutrient-solution-use-alt-icons",
+        setting_type = "startup",
+        default_value = false,
+        order = "g",
     }
 })
