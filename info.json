@@ -4,6 +4,6 @@
   "title": "Fluid Nutrients",
   "author": "BradH",
   "factorio_version": "2.0",
-  "dependencies": ["base >= 2.0", "space-age"],
+  "dependencies": ["base >= 2.0", "space-age", "? quality-seeds-fork"],
   "description": "Nutrients are replaced with nutrient solution"
 }
