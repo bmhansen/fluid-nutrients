@@ -66,16 +66,17 @@ for _,technology in pairs(data.raw.technology) do
 end
 
 -- Generic conversion: any entity with a burner energy source using the "nutrients" fuel
--- category gets converted to burn nutrient-solution fluid, with auto-placed pipes.
+-- category, or bioflux's fuel category, gets converted to burn nutrient-solution fluid.
 local _pipe_covers = data.raw["assembling-machine"]["biochamber"].fluid_boxes[1].pipe_covers
 local _em_fb  = data.raw["assembling-machine"]["electromagnetic-plant"].fluid_boxes[1]
 local _asm2_fb = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1]
 local _flow_direction = settings.startup["nutrient-solution-flow-through"].value and "input-output" or "input"
+local _bioflux_fuel_category = data.raw.item["bioflux"] and data.raw.item["bioflux"].fuel_category
 
-local function uses_nutrients_burner(source)
+local function uses_fuel_category(source, category)
     if not source or source.type ~= "burner" then return false end
     for _, cat in pairs(source.fuel_categories or {}) do
-        if cat == "nutrients" then return true end
+        if cat == category then return true end
     end
     return false
 end
@@ -177,7 +178,7 @@ end
 -- Entity types that expose fuel via energy_source
 for _, type_name in pairs({"assembling-machine", "furnace", "mining-drill", "lab", "boiler", "reactor"}) do
     for _, entity in pairs(data.raw[type_name] or {}) do
-        if uses_nutrients_burner(entity.energy_source) then
+        if uses_fuel_category(entity.energy_source, "nutrients") then
             local new_source = make_nutrient_fluid_source(entity, entity.energy_source)
             if new_source then entity.energy_source = new_source end
         end
@@ -186,9 +187,22 @@ end
 
 -- Burner-generators expose fuel via a separate `burner` field
 for _, entity in pairs(data.raw["burner-generator"] or {}) do
-    if uses_nutrients_burner(entity.burner) then
+    if uses_fuel_category(entity.burner, "nutrients") then
         local new_source = make_nutrient_fluid_source(entity, entity.burner)
         if new_source then entity.burner = new_source end
+    end
+end
+
+-- Convert any captive-spawner-type entity (bioflux fuel category) to nutrient-solution
+-- when the captive biter spawner setting is enabled.
+if settings.startup["captive-biter-spawner-use-nutrient-solution"].value and _bioflux_fuel_category then
+    for _, type_name in pairs({"assembling-machine", "furnace", "mining-drill", "lab", "boiler", "reactor"}) do
+        for _, entity in pairs(data.raw[type_name] or {}) do
+            if uses_fuel_category(entity.energy_source, _bioflux_fuel_category) then
+                local new_source = make_nutrient_fluid_source(entity, entity.energy_source)
+                if new_source then entity.energy_source = new_source end
+            end
+        end
     end
 end
 
