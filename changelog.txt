@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-06-20
+  Features:
+    - Generic entity converter: any entity with a nutrients burner fuel category is automatically converted to use nutrient solution fluid with auto-placed pipes.
+    - Generic captive-spawner converter: any bioflux-burning entity is converted to nutrient solution when the captive biter spawner setting is enabled, covering modded spawners.
+    - Added alternate icons setting where nutrient fluid icons have white nutrients inside.
+  Changes:
+    - Flow-through setting is now generic and not specific to the biochamber.
+  Bugfixes:
+    - Fixed nutrients recipes added by other mods not being converted due to load order.
+    - Fixed pipe placement collision detection when entity already has fluid boxes occupying connection positions.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 2025-02-16
   Info:
