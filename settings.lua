@@ -33,5 +33,12 @@ data:extend({
         setting_type = "startup",
         default_value = false,
         order = "e",
+    },
+    {
+        type = "bool-setting",
+        name = "nutrient-solution-use-alt-icons",
+        setting_type = "startup",
+        default_value = false,
+        order = "f",
     }
 })

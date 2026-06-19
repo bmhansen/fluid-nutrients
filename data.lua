@@ -22,6 +22,16 @@ data.raw.recipe["nutrients-from-bioflux"].icon = "__fluid-nutrients__/gfx/nutrie
 data.raw.recipe["nutrients-from-fish"].icon = "__fluid-nutrients__/gfx/nutrient-solution-from-fish.png"
 data.raw.recipe["nutrients-from-biter-egg"].icon = "__fluid-nutrients__/gfx/nutrient-solution-from-biter-egg.png"
 
+-- Swap to alt icons if setting is on
+if settings.startup["nutrient-solution-use-alt-icons"].value then
+    data.raw.fluid["nutrient-solution"].icon = "__fluid-nutrients__/gfx/nutrient-solution-alt.png"
+    data.raw.recipe["nutrients-from-spoilage"].icon = "__fluid-nutrients__/gfx/nutrient-solution-from-spoilage-alt.png"
+    data.raw.recipe["nutrients-from-yumako-mash"].icon = "__fluid-nutrients__/gfx/nutrient-solution-from-yumako-mash-alt.png"
+    data.raw.recipe["nutrients-from-bioflux"].icon = "__fluid-nutrients__/gfx/nutrient-solution-from-bioflux-alt.png"
+    data.raw.recipe["nutrients-from-fish"].icon = "__fluid-nutrients__/gfx/nutrient-solution-from-fish-alt.png"
+    data.raw.recipe["nutrients-from-biter-egg"].icon = "__fluid-nutrients__/gfx/nutrient-solution-from-biter-egg-alt.png"
+end
+
 -- Update biter-spawner related text if setting is on
 if settings.startup["captive-biter-spawner-use-nutrient-solution"].value then
     data.raw.technology["captivity"].localised_description = {"technology-description.captivity-nutrient-solution"}
