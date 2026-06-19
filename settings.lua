@@ -22,30 +22,23 @@ data:extend({
     },
     {
         type = "bool-setting",
-        name = "biochamber-nutrient-solution-flow-through",
+        name = "nutrient-solution-flow-through",
         setting_type = "startup",
         default_value = false,
         order = "d",
     },
     {
         type = "bool-setting",
-        name = "biolab-nutrient-solution-flow-through",
+        name = "water-needed-to-make-nutrient-solution",
         setting_type = "startup",
         default_value = false,
         order = "e",
     },
     {
         type = "bool-setting",
-        name = "water-needed-to-make-nutrient-solution",
-        setting_type = "startup",
-        default_value = false,
-        order = "f",
-    },
-    {
-        type = "bool-setting",
         name = "nutrient-solution-use-alt-icons",
         setting_type = "startup",
         default_value = false,
-        order = "g",
+        order = "f",
     }
 })
