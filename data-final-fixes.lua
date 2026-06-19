@@ -71,11 +71,11 @@ local _pipe_covers = data.raw["assembling-machine"]["biochamber"].fluid_boxes[1]
 local _em_fb  = data.raw["assembling-machine"]["electromagnetic-plant"].fluid_boxes[1]
 local _asm2_fb = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1]
 local _flow_direction = settings.startup["nutrient-solution-flow-through"].value and "input-output" or "input"
-local _bioflux_fuel_category = data.raw.item["bioflux"] and data.raw.item["bioflux"].fuel_category
+local _bioflux_fuel_category = data.raw.capsule["bioflux"] and data.raw.capsule["bioflux"].fuel_category
 
 local function uses_fuel_category(source, category)
-    if not source or source.type ~= "burner" then return false end
-    for _, cat in pairs(source.fuel_categories or {}) do
+    if not source or not source.fuel_categories then return false end
+    for _, cat in pairs(source.fuel_categories) do
         if cat == category then return true end
     end
     return false
@@ -193,8 +193,9 @@ for _, entity in pairs(data.raw["burner-generator"] or {}) do
     end
 end
 
--- Convert any captive-spawner-type entity (bioflux fuel category) to nutrient-solution
--- when the captive biter spawner setting is enabled.
+-- Convert any other captive-spawner-type entity (bioflux fuel category) to nutrient-solution
+-- when the captive biter spawner setting is enabled. The vanilla captive-biter-spawner is
+-- handled explicitly in data-updates.lua; this catches equivalents added by other mods.
 if settings.startup["captive-biter-spawner-use-nutrient-solution"].value and _bioflux_fuel_category then
     for _, type_name in pairs({"assembling-machine", "furnace", "mining-drill", "lab", "boiler", "reactor"}) do
         for _, entity in pairs(data.raw[type_name] or {}) do

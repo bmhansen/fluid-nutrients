@@ -38,4 +38,3 @@ if settings.startup["biolab-use-nutrient-solution"].value then
         emissions_per_minute = biolab.energy_source.emissions_per_minute,
     }
 end
-
