@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-06-20
+  Changes:
+    - Added emergency fallback compatibility recipe that converts fluid nutrients into the nutrients item if another mod fails to convert.
+  Bugfixes:
+    - Fixed modded burner-generators not converting correctly, they will now be converted into generators that can burn fluid.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2026-06-20
   Features:
