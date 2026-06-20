@@ -40,5 +40,12 @@ data:extend({
         setting_type = "startup",
         default_value = false,
         order = "f",
+    },
+    {
+        type = "bool-setting",
+        name = "nutrients-from-nutrient-solution-recipe",
+        setting_type = "startup",
+        default_value = false,
+        order = "g",
     }
 })

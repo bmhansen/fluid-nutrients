@@ -302,6 +302,23 @@ if settings.startup["captive-biter-spawner-use-nutrient-solution"].value and _bi
     end
 end
 
+-- Fallback recipe: convert nutrient-solution fluid back to nutrients item for compatibility
+if settings.startup["nutrients-from-nutrient-solution-recipe"].value then
+    data:extend({{
+        type = "recipe",
+        name = "nutrients-from-nutrient-solution",
+        category = "crafting-with-fluid",
+        ingredients = {
+            {type = "fluid", name = "nutrient-solution", amount = nutrient_solution_ratio},
+        },
+        results = {
+            {type = "item", name = "nutrients", amount = 1},
+        },
+        energy_required = 1,
+        enabled = true,
+    }})
+end
+
 -- Nerf biter egg recipe now that conversion loop has run (divides the already-multiplied amount)
 if settings.startup["captive-biter-spawner-use-nutrient-solution"].value then
     local biter_nutrient_recipe = data.raw.recipe["nutrients-from-biter-egg"]
