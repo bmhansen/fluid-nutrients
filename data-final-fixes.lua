@@ -185,11 +185,106 @@ for _, type_name in pairs({"assembling-machine", "furnace", "mining-drill", "lab
     end
 end
 
--- Burner-generators expose fuel via a separate `burner` field
-for _, entity in pairs(data.raw["burner-generator"] or {}) do
+-- Burner-generators burning nutrients are converted to fluid-burning generators.
+-- The burner-generator type is engine-locked to BurnerEnergySource, so we replace the
+-- prototype entirely with type "generator" which natively supports burns_fluid.
+local function parse_joules(s)
+    local num = tonumber(s:match("[%d%.]+")) or 0
+    if s:find("GJ") then return num * 1e9
+    elseif s:find("MJ") then return num * 1e6
+    elseif s:find("kJ") then return num * 1e3
+    else return num end
+end
+
+local function parse_watts(s)
+    local num = tonumber(s:match("[%d%.]+")) or 0
+    if s:find("GW") then return num * 1e9
+    elseif s:find("MW") then return num * 1e6
+    elseif s:find("kW") then return num * 1e3
+    else return num end
+end
+
+local _ns_fuel_joules = parse_joules(data.raw.fluid["nutrient-solution"].fuel_value)
+
+for name, entity in pairs(data.raw["burner-generator"] or {}) do
     if uses_fuel_category(entity.burner, "nutrients") then
-        local new_source = make_nutrient_fluid_source(entity, entity.burner)
-        if new_source then entity.burner = new_source end
+        local conn_a, conn_b = find_pipe_positions(entity, entity.collision_box)
+        if conn_a then
+            local effectivity = entity.burner.effectivity or 1
+            local power_watts = parse_watts(entity.max_power_output or "0W")
+            local fluid_usage_per_tick = power_watts / (60 * _ns_fuel_joules * effectivity)
+
+            local new_entity = table.deepcopy(entity)
+            new_entity.type = "generator"
+            new_entity.burns_fluid = true
+            new_entity.scale_fluid_usage = true
+            new_entity.effectivity = effectivity
+            new_entity.fluid_usage_per_tick = fluid_usage_per_tick
+            new_entity.maximum_temperature = 100
+            new_entity.fluid_box = {
+                volume = 10,
+                filter = "nutrient-solution",
+                minimum_temperature = 15,
+                maximum_temperature = 100,
+                pipe_picture = {
+                    north = table.deepcopy(_em_fb.pipe_picture.north),
+                    east  = table.deepcopy(_em_fb.pipe_picture.east),
+                    south = table.deepcopy(_asm2_fb.pipe_picture.south),
+                    west  = table.deepcopy(_asm2_fb.pipe_picture.west),
+                },
+                pipe_picture_frozen = {
+                    north = table.deepcopy(_em_fb.pipe_picture_frozen.north),
+                    east  = table.deepcopy(_em_fb.pipe_picture_frozen.east),
+                    south = table.deepcopy(_asm2_fb.pipe_picture_frozen.south),
+                    west  = table.deepcopy(_asm2_fb.pipe_picture_frozen.west),
+                },
+                pipe_covers = _pipe_covers,
+                pipe_connections = {
+                    {flow_direction = _flow_direction, direction = conn_a.dir, position = conn_a.pos},
+                    {flow_direction = _flow_direction, direction = conn_b.dir, position = conn_b.pos},
+                },
+                secondary_draw_orders = {north = -1},
+            }
+            if entity.burner.smoke and not new_entity.smoke then
+                new_entity.smoke = table.deepcopy(entity.burner.smoke)
+                for _, s in pairs(new_entity.smoke) do
+                    s.frequency = 1/6
+                end
+            end
+            new_entity.burner = nil
+            new_entity.max_power_output = nil
+
+            -- generator uses horizontal_animation/vertical_animation, not animation/idle_animation
+            if new_entity.animation then
+                new_entity.horizontal_animation = table.deepcopy(new_entity.animation)
+                new_entity.vertical_animation = table.deepcopy(new_entity.animation)
+                new_entity.animation = nil
+            end
+            new_entity.idle_animation = nil
+
+            -- burner-generator smoke comes from the burner mechanism; generator needs it explicit
+            if not new_entity.smoke then
+                local north_y = math.ceil(entity.collision_box[1][2])
+                local south_y = math.floor(entity.collision_box[2][2])
+                local west_x  = math.ceil(entity.collision_box[1][1])
+                local east_x  = math.floor(entity.collision_box[2][1])
+                new_entity.smoke = {
+                    {
+                        name = "smoke",
+                        north_position = {0,      north_y},
+                        east_position  = {east_x, 0      },
+                        south_position = {0,      south_y},
+                        west_position  = {west_x, 0      },
+                        frequency = 1/6,
+                        starting_vertical_speed = 0.0,
+                        starting_frame_deviation = 60,
+                    },
+                }
+            end
+
+            data:extend({new_entity})
+            data.raw["burner-generator"][name] = nil
+        end
     end
 end
 
