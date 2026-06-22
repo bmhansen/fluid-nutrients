@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2026-06-23
+  Changes:
+    - Reverted flow-through setting name back to biochamber-nutrient-solution-flow-through for compatibility with quality-seeds-fork and other mods that referenced the old name.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2026-06-20
   Changes:
