@@ -22,7 +22,7 @@ data:extend({
     },
     {
         type = "bool-setting",
-        name = "nutrient-solution-flow-through",
+        name = "biochamber-nutrient-solution-flow-through",
         setting_type = "startup",
         default_value = false,
         order = "d",
@@ -47,5 +47,5 @@ data:extend({
         setting_type = "startup",
         default_value = false,
         order = "g",
-    }
+    },
 })

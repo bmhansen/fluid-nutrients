@@ -2,7 +2,7 @@ local biochamber = data.raw["assembling-machine"]["biochamber"]
 
 -- Update biolab to take nutrient-solution as fuel
 if settings.startup["biolab-use-nutrient-solution"].value then
-    local flow_direction = settings.startup["nutrient-solution-flow-through"].value and "input-output" or "input"
+    local flow_direction = settings.startup["biochamber-nutrient-solution-flow-through"].value and "input-output" or "input"
 
     local biolab = data.raw["lab"]["biolab"]
     biolab.energy_source = {

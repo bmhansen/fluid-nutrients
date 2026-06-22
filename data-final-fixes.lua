@@ -70,7 +70,7 @@ end
 local _pipe_covers = data.raw["assembling-machine"]["biochamber"].fluid_boxes[1].pipe_covers
 local _em_fb  = data.raw["assembling-machine"]["electromagnetic-plant"].fluid_boxes[1]
 local _asm2_fb = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1]
-local _flow_direction = settings.startup["nutrient-solution-flow-through"].value and "input-output" or "input"
+local _flow_direction = settings.startup["biochamber-nutrient-solution-flow-through"].value and "input-output" or "input"
 local _bioflux_fuel_category = data.raw.capsule["bioflux"] and data.raw.capsule["bioflux"].fuel_category
 
 local function uses_fuel_category(source, category)
