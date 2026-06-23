@@ -106,18 +106,29 @@ end
 
 local function find_pipe_positions(entity, cb)
     local existing = collect_existing_connections(entity)
-    local west_x  = math.ceil(cb[1][1])
-    local east_x  = math.floor(cb[2][1])
-    local north_y = math.ceil(cb[1][2])
-    local south_y = math.floor(cb[2][2])
+    -- Use selection_box for edge positions: collision_box can be inset (e.g. ±1.8 vs ±2.0)
+    -- which would recess the pipe inside the entity footprint and prevent connections.
+    local sb = entity.selection_box or cb
+
+    -- +/-0.5 from each edge gives the innermost tile center on that side.
+    -- Works for both odd (half-int bounds: -1.5+0.5=-1) and even (int bounds: -2+0.5=-1.5),
+    -- and stays inside the collision box unlike math.ceil/floor on the raw edge value.
+    local west_x  = sb[1][1] + 0.5
+    local east_x  = sb[2][1] - 0.5
+    local north_y = sb[1][2] + 0.5
+    local south_y = sb[2][2] - 0.5
+
+    -- Even-size entities snap to tile corners, so y=0/x=0 falls between tiles.
+    local yo = (sb[1][2] % 1 == 0) and 0.5 or 0
+    local xo = (sb[1][1] % 1 == 0) and 0.5 or 0
 
     local candidates = {
-        {{dir = defines.direction.west,  pos = {west_x,  0}},       {dir = defines.direction.east,  pos = {east_x,  0}}},
-        {{dir = defines.direction.north, pos = {0,  north_y}},      {dir = defines.direction.south, pos = {0,  south_y}}},
-        {{dir = defines.direction.west,  pos = {west_x,  1}},       {dir = defines.direction.east,  pos = {east_x,  1}}},
-        {{dir = defines.direction.west,  pos = {west_x, -1}},       {dir = defines.direction.east,  pos = {east_x, -1}}},
-        {{dir = defines.direction.north, pos = {1,  north_y}},      {dir = defines.direction.south, pos = {1,  south_y}}},
-        {{dir = defines.direction.north, pos = {-1, north_y}},      {dir = defines.direction.south, pos = {-1, south_y}}},
+        {{dir = defines.direction.west,  pos = {west_x,       yo}}, {dir = defines.direction.east,  pos = { east_x,      yo}}},
+        {{dir = defines.direction.north, pos = {xo,      north_y}}, {dir = defines.direction.south, pos = {     xo, south_y}}},
+        {{dir = defines.direction.west,  pos = {west_x,   1 + yo}}, {dir = defines.direction.east,  pos = { east_x,  1 + yo}}},
+        {{dir = defines.direction.west,  pos = {west_x,  -1 + yo}}, {dir = defines.direction.east,  pos = { east_x, -1 + yo}}},
+        {{dir = defines.direction.north, pos = { 1 + xo, north_y}}, {dir = defines.direction.south, pos = { 1 + xo, south_y}}},
+        {{dir = defines.direction.north, pos = {-1 + xo, north_y}}, {dir = defines.direction.south, pos = {-1 + xo, south_y}}},
     }
 
     for _, pair in pairs(candidates) do
