@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2026-06-23
+  Bugfixes:
+    - Fixed auto-placed pipe connections not working with even-numbered dimensions, and when the entity's collision box is smaller than it's tile size.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2026-06-23
   Changes:
